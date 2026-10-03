@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegance - Go'zallik Saloni</title>
+    
+    <!-- Tailwind CSS orqali zamonaviy va tezkor dizayn -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Sarlavhalar uchun Playfair Display, matnlar uchun Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome iconlari -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom konfiguratsiya va animatsiyalar */
+        :root {
+            --primary-gold: #D4AF37;
+            --dark-gray: #1a1a1a;
+            --soft-rose: #faf6f5;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--soft-rose);
+            color: var(--dark-gray);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* SPA sahifalar almashinuvi uchun animatsiya */
+        .fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hero bo'limi uchun fon rasmi */
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Xizmatlar kartochkasi hover effekti */
+        .service-card {
+            transition: all 0.4s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* SPA dagi yashirin sahifalar uchun */
+        .spa-section {
+            display: none;
+        }
+        .spa-section.active {
+            display: block;
+        }
+
+        /* Nav link hover effekti */
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--primary-gold);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link.active-nav::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <header class="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 cursor-pointer text-2xl font-playfair font-bold tracking-wider" onclick="navigate('home')">
+                    Elegance<span class="text-[#D4AF37]">.</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-10">
+                    <a href="#" class="nav-link active-nav text-gray-800 hover:text-[#D4AF37] font-medium transition-colors" data-target="home">Bosh sahifa</a>
+                    <a href="#" class="nav-link text-gray-800 hover:text-[#D4AF37] font-medium transition-colors" data-target="services">Xizmatlar</a>
+                    <a href="#" class="nav-link text-gray-800 hover:text-[#D4AF37] font-medium transition-colors" data-target="contact">Aloqa</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-800 hover:text-[#D4AF37] focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#" class="nav-link active-nav block px-3 py-2 text-base font-medium text-gray-800" data-target="home">Bosh sahifa</a>
+                <a href="#" class="nav-link block px-3 py-2 text-base font-medium text-gray-800" data-target="services">Xizmatlar</a>
+                <a href="#" class="nav-link block px-3 py-2 text-base font-medium text-gray-800" data-target="contact">Aloqa</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area (SPA Container) -->
+    <main class="flex-grow pt-20">
+
+        <!-- 1. BOSH SAHIFA (HOME) -->
+        <section id="home" class="spa-section active fade-in min-h-[calc(100vh-5rem)] flex items-center justify-center hero-bg relative">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
+            <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+                <span class="block text-[#D4AF37] tracking-[0.2em] text-sm md:text-base uppercase mb-4 font-semibold">Premium Xizmatlar</span>
+                <h1 class="text-4xl md:text-6xl lg:text-7xl text-white font-bold mb-6 leading-tight drop-shadow-lg">
+                    Go'zallik va Nafosat <br/><span class="italic text-[#D4AF37]">dunyosiga xush kelibsiz!</span>
+                </h1>
+                <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                    O'zingizni kashf eting. Bizning professional mutaxassislarimiz sizning betakror go'zalligingizni va o'ziga ishonchingizni ochishga yordam beradi.
+                </p>
+                <button onclick="navigate('services')" class="bg-[#D4AF37] text-white px-8 py-4 rounded-full font-medium text-lg hover:bg-[#b8952b] transition-all transform hover:scale-105 shadow-lg shadow-[#D4AF37]/30">
+                    Xizmatlarni ko'rish
+                </button>
+            </div>
+        </section>
+
+        <!-- 2. XIZMATLAR (SERVICES) -->
+        <section id="services" class="spa-section py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold font-playfair mb-4 text-gray-900">Bizning Xizmatlar</h2>
+                <div class="w-24 h-1 bg-[#D4AF37] mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">Sizning mukammal ko'rinishingiz uchun eng sifatli mahsulotlar va so'nggi texnologiyalardan foydalanamiz.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Xizmat 1 -->
+                <div class="service-card bg-white rounded-2xl overflow-hidden border border-gray-100 relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80" alt="Soch turmaklash" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-rose-50 text-[#D4AF37] rounded-full flex items-center justify-center mb-4 text-xl">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-playfair mb-2 text-gray-900">Soch turmaklash va bo'yash</h3>
+                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">Sochlaringiz uchun eng so'nggi trendlar, murakkab bo'yash usullari va professional parvarish.</p>
+                        <p class="text-[#D4AF37] font-semibold text-lg border-t pt-4 border-gray-100">150,000 UZS dan</p>
+                    </div>
+                </div>
+
+                <!-- Xizmat 2 -->
+                <div class="service-card bg-white rounded-2xl overflow-hidden border border-gray-100 relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1512496015851-a1c8f4819446?auto=format&fit=crop&q=80" alt="Makiyaj" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-rose-50 text-[#D4AF37] rounded-full flex items-center justify-center mb-4 text-xl">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-playfair mb-2 text-gray-900">Professional Makiyaj</h3>
+                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">Kechki oqshom, to'y yoki kundalik hayot uchun yuzingizga mos mukammal va chidamli makiyaj.</p>
+                        <p class="text-[#D4AF37] font-semibold text-lg border-t pt-4 border-gray-100">200,000 UZS dan</p>
+                    </div>
+                </div>
+
+                <!-- Xizmat 3 -->
+                <div class="service-card bg-white rounded-2xl overflow-hidden border border-gray-100 relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&q=80" alt="Manikur" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-rose-50 text-[#D4AF37] rounded-full flex items-center justify-center mb-4 text-xl">
+                            <i class="fas fa-hand-sparkles"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-playfair mb-2 text-gray-900">Manikur va Pedikur</h3>
+                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">Nafosatli qo'llar va oyoqlar uchun yuqori sifatli dizayn, sterilizatsiya qilingan asboblar va xizmat.</p>
+                        <p class="text-[#D4AF37] font-semibold text-lg border-t pt-4 border-gray-100">100,000 UZS dan</p>
+                    </div>
+                </div>
+
+                <!-- Xizmat 4 -->
+                <div class="service-card bg-white rounded-2xl overflow-hidden border border-gray-100 relative group">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&q=80" alt="Kosmetologiya" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-all"></div>
+                    </div>
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-rose-50 text-[#D4AF37] rounded-full flex items-center justify-center mb-4 text-xl">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-playfair mb-2 text-gray-900">Kosmetologiya</h3>
+                        <p class="text-gray-600 mb-4 text-sm leading-relaxed">Yuz terisini chuqur tozalash, yoshartirish va sog'lomlashtirish uchun apparatli muolajalar.</p>
+                        <p class="text-[#D4AF37] font-semibold text-lg border-t pt-4 border-gray-100">300,000 UZS dan</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center bg-white p-8 rounded-2xl shadow-sm border border-rose-100">
+                <h3 class="text-2xl font-playfair mb-4">Sizga o'ziga xos yondashuv kerakmi?</h3>
+                <p class="text-gray-600 mb-6">Mutaxassislarimizdan bepul maslahat oling va o'zingizga mos xizmatni tanlang.</p>
+                <button onclick="navigate('contact')" class="border-2 border-[#D4AF37] text-[#D4AF37] px-8 py-3 rounded-full font-medium hover:bg-[#D4AF37] hover:text-white transition-all">
+                    Maslahat olish
+                </button>
+            </div>
+        </section>
+
+        <!-- 3. ALOQA VA BRON QILISH (CONTACT) -->
+        <section id="contact" class="spa-section py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+             <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-5xl font-bold font-playfair mb-4 text-gray-900">Band qilish va Aloqa</h2>
+                <div class="w-24 h-1 bg-[#D4AF37] mx-auto rounded-full mb-6"></div>
+                <p class="text-gray-600 max-w-2xl mx-auto text-lg">O'zingizga qulay vaqtni tanlang va bizning qabulimizga yoziling.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white rounded-3xl shadow-xl overflow-hidden">
+                
+                <!-- Contact Info Side -->
+                <div class="bg-gray-900 text-white p-10 md:p-14 flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-16 -mr-16 w-64 h-64 bg-[#D4AF37] opacity-10 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 -mb-16 -ml-16 w-64 h-64 bg-rose-500 opacity-10 rounded-full blur-3xl"></div>
+                    
+                    <h3 class="text-3xl font-playfair mb-8 relative z-10">Bizning Manzil</h3>
+                    
+                    <div class="space-y-6 relative z-10">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-[#D4AF37] mr-4 flex-shrink-0">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-200">Manzil</h4>
+                                <p class="text-gray-400 mt-1">Toshkent sh., Yunusobod tumani,<br> Amir Temur ko'chasi, 15-uy</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-[#D4AF37] mr-4 flex-shrink-0">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-200">Telefon</h4>
+                                <p class="text-gray-400 mt-1">+998 90 123 45 67<br>+998 71 234 56 78</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center text-[#D4AF37] mr-4 flex-shrink-0">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-200">Ish vaqti</h4>
+                                <p class="text-gray-400 mt-1">Dushanba - Yakshanba<br>09:00 - 20:00</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-12 pt-8 border-t border-gray-800 relative z-10">
+                        <h4 class="text-lg font-semibold mb-4 text-gray-200">Ijtimoiy tarmoqlarimiz</h4>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-white hover:bg-[#D4AF37] transition-colors"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-white hover:bg-[#D4AF37] transition-colors"><i class="fab fa-telegram-plane"></i></a>
+                            <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-white hover:bg-[#D4AF37] transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Form Side -->
+                <div class="p-10 md:p-14">
+                    <h3 class="text-2xl font-playfair mb-6 text-gray-900">Onlayn yozilish</h3>
+                    <form id="booking-form" class="space-y-6" onsubmit="event.preventDefault(); submitForm();">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ismingiz</label>
+                                <input type="text" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all bg-gray-50" placeholder="Masalan: Aziza">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Telefon raqamingiz</label>
+                                <input type="tel" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all bg-gray-50" placeholder="+998 __ ___ __ __">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Xizmat turini tanlang</label>
+                            <select required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all bg-gray-50 appearance-none">
+                                <option value="" disabled selected>Xizmatni tanlang...</option>
+                                <option value="hair">Soch turmaklash va bo'yash</option>
+                                <option value="makeup">Professional Makiyaj</option>
+                                <option value="nails">Manikur va Pedikur</option>
+                                <option value="skincare">Kosmetologiya</option>
+                                <option value="consult">Mutaxassis maslahati (Bepul)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sana</label>
+                                <input type="date" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all bg-gray-50">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Qulay vaqt</label>
+                                <input type="time" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent outline-none transition-all bg-gray-50">
+                            </div>
+                        </div>
+
+                        <div id="form-message" class="hidden p-4 rounded-lg bg-green-50 text-green-700 border border-green-200 text-sm">
+                            Arizangiz muvaffaqiyatli qabul qilindi. Tez orada ma'murimiz siz bilan bog'lanadi!
+                        </div>
+
+                        <button type="submit" class="w-full bg-gray-900 text-white font-medium py-4 rounded-lg hover:bg-gray-800 transition-colors shadow-lg mt-4">
+                            Band qilishni tasdiqlash
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="text-xl font-playfair font-bold text-gray-800 mb-4 md:mb-0">
+                Elegance<span class="text-[#D4AF37]">.</span>
+            </div>
+            <p class="text-gray-500 text-sm text-center md:text-left">
+                &copy; 2026 Elegance Go'zallik Saloni. Barcha huquqlar himoyalangan.
+            </p>
+            <div class="flex space-x-6 mt-4 md:mt-0 text-sm text-gray-500">
+                <a href="#" class="hover:text-[#D4AF37] transition-colors">Maxfiylik siyosati</a>
+                <a href="#" class="hover:text-[#D4AF37] transition-colors">Foydalanish shartlari</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // SPA Navigatsiya mantig'i
+        const sections = document.querySelectorAll('.spa-section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // Mobil menuni ochish/yopish
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Sahifalar bo'ylab harakatlanish funksiyasi
+        function navigate(targetId) {
+            // Hamma bo'limlarni yashirish va fade-in animatsiyasini olib tashlash
+            sections.forEach(section => {
+                section.classList.remove('active', 'fade-in');
+            });
+
+            // Faqat tanlangan bo'limni ko'rsatish
+            const targetSection = document.getElementById(targetId);
+            if(targetSection) {
+                targetSection.classList.add('active');
+                
+                // Kichik timeout orqali animatsiyani qayta ishga tushirish
+                setTimeout(() => {
+                    targetSection.classList.add('fade-in');
+                }, 10);
+            }
+
+            // Navigatsiya tugmalari aktiv holatini yangilash
+            navLinks.forEach(link => {
+                link.classList.remove('active-nav', 'text-[#D4AF37]');
+                if (link.getAttribute('data-target') === targetId) {
+                    link.classList.add('active-nav');
+                    link.style.color = 'var(--primary-gold)'; // In-line styling for force highlight if needed
+                } else {
+                    link.style.color = ''; // Reset
+                }
+            });
+
+            // Mobil menyuni yopib qo'yish (agar ochiq bo'lsa)
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+
+            // Sahifa eng tepasiga scroll qilish
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Navigatsiya havolalariga event listener qo'shish
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = link.getAttribute('data-target');
+                navigate(target);
+            });
+        });
+
+        // Formani yuborish simulatsiyasi
+        function submitForm() {
+            const msgBox = document.getElementById('form-message');
+            msgBox.classList.remove('hidden');
+            
+            // Formani tozalash
+            document.getElementById('booking-form').reset();
+
+            // 5 soniyadan so'ng xabarni yashirish
+            setTimeout(() => {
+                msgBox.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
